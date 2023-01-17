@@ -10,51 +10,31 @@ services:
       command: bash -c "mvn clean package && java -jar ./target/login-0.0.1-SNAPSHOT.jar"
       tty: true
       depends_on:
-        - postgresql
         - login-keycloak
-      ports:
-        - 8000:8000
     login-app:
       build:
           context: ./
           dockerfile: Dockerfile.app
-      ports:
-          - '80:8000'
       volumes:
           - './app:/var/www/html'
       networks:
           - login-networks
       depends_on:
-          - postgresql
           - login-api
       working_dir: /var/www/html
       command: bash -c "composer install && npm install && php artisan serve --host=0.0.0.0 --port=8000"
+      ports:
+        - 80:8000
     login-keycloak:
-      image: quay.io/keycloak/keycloak:20.0.3
+      image: quay.io/keycloak/keycloak
+      volumes:
+        - ./keycloak:/opt/keycloak/data/import
       environment:
         - KEYCLOAK_ADMIN=admin
         - KEYCLOAK_ADMIN_PASSWORD=admin
-        - KEYCLOAK_DATABASE_HOST=postgresql
-        - KEYCLOAK_DATABASE_NAME=login
-        - KEYCLOAK_DATABASE_USER=logindb
-        - KEYCLOAK_DATABASE_PASSWORD=Cy2.9uSr#vXKS4
       command: start-dev
-      depends_on: 
-        - postgresql
       ports:
         - 8080:8080
-      networks:
-          - login-networks
-    postgresql:
-      image: postgres
-      restart: always
-      volumes:
-       - ./postgres:/var/lib/postgresql/data
-      environment:
-        - POSTGRES_PASSWORD=Cy2.9uSr#vXKS4
-        - POSTGRES_USER=logindb
-        - POSTGRES_DB=login
-        - PGDATA=/var/lib/postgresql/data/dbdata
       networks:
           - login-networks
 networks:

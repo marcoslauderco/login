@@ -27,13 +27,13 @@ Route::get('/auth/callback', function () {
 
 Route::get('/logout', function(Request $request){
     $cookie = cookie('jwt','', );
-    return redirect("http://172.16.3.169:8080/realms/login/protocol/openid-connect/logout")->cookie($cookie);;
+    return redirect(env('KEYCLOAK_BASE_URL')."/realms/login/protocol/openid-connect/logout")->cookie($cookie);;
 });
 
 Route::get('/', function (Request $request) {
     $response = Http::withToken($request->cookie('jwt'))
         ->get(
-            'http://login-api:8000/user'
+            env('API_URL').'/user'
         );
     $response->throw();
     $return = $response->json();
