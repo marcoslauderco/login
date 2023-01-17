@@ -17,9 +17,17 @@ public class LoginApplication {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(authorize -> authorize
-			.anyRequest().authenticated())
-			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+		// http.authorizeHttpRequests(authorize -> authorize
+		// 	.anyRequest().authenticated())
+		// 	.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+
+		http.authorizeHttpRequests()
+			.anyRequest()
+			.authenticated()
+			.and()
+			.oauth2ResourceServer()
+			.jwt();
+
 		return http.build();
 	}
 }

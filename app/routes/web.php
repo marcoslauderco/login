@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -14,28 +18,30 @@ use Laravel\Socialite\Facades\Socialite;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-   return Socialite::driver('keycloak')->redirect();
-});
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('keycloak')->redirect();
-});
-
 Route::get('/auth/callback', function () {
-    $user = Socialite::driver('keycloak')->user();
-    $response = Http::withHeaders([])
-        ->withToken($user->token)
-        ->get(
-            'http://login-api:8000/hello/user'
-        );
-    var_dump($response->status());
-    echo "<br>";
-    var_dump($response->body());
-    echo "<br><pre>";
-    var_dump($user);
+    $socialite = Socialite::driver('keycloak')->user();
+    $user = User::createFromOauth($socialite);
+    $cookie = cookie('jwt', $user->token, 1);
+    return redirect(url()->previous())->cookie($cookie);
 });
+
+Route::get('/logout', function(Request $request){
+    $cookie = cookie('jwt','', );
+    return redirect("http://172.16.3.169:8080/realms/login/protocol/openid-connect/logout")->cookie($cookie);;
+});
+
+Route::get('/', function (Request $request) {
+    $response = Http::withToken($request->cookie('jwt'))
+        ->get(
+            'http://login-api:8000/user'
+        );
+    $response->throw();
+    $return = $response->json();
+    $body = $response->body();
+    $status = $response->status();
+    $username = $return['nome'];
+    return view('welcome',compact('username','body','status'));
+})->middleware("ouath");
+
+
+

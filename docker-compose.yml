@@ -49,11 +49,12 @@ services:
       image: postgres
       restart: always
       volumes:
-       - ./dbdata:/var/lib/postgresql/data
+       - ./postgres:/var/lib/postgresql/data
       environment:
         - POSTGRES_PASSWORD=Cy2.9uSr#vXKS4
         - POSTGRES_USER=logindb
         - POSTGRES_DB=login
+        - PGDATA=/var/lib/postgresql/data/dbdata
       networks:
           - login-networks
 networks:

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'token',
     ];
 
     /**
@@ -41,4 +42,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function createFromOauth($oauth) {
+        $user = new User();
+        $user->id = $oauth->id;
+        $user->name = $oauth->name;
+        $user->token = $oauth->token;
+        return $user;
+    }
 }
