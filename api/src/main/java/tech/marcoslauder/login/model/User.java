@@ -17,9 +17,12 @@ public class User implements Serializable {
 
     private String id;
     private String nome;
+    private String email;
 
     public static User createFromJwt(Jwt jwt) {
-        return new User(jwt.getClaimAsString("sid"), jwt.getClaimAsString("name"));
+        return new User(jwt.getClaimAsString("sid"), 
+                        jwt.getClaimAsString("name"),
+                        jwt.getClaimAsString("email"));
     }
 
 }

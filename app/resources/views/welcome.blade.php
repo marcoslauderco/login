@@ -29,7 +29,8 @@
           <div class="w3-card w3-round w3-white">
             <div class="w3-container">
              <h1 class="w3-center">Logado com sucesso</h1>
-             <p class="w3-center">Usuário: {{$username}}</p>
+             <p class="w3-center">Usuário: {{$user['nome']}}</p>
+             <p class="w3-center">Email: {{$user['email']}}</p>
              <hr>
              <h2>Resposta da API</h2>
              <p>Status code: {{$status}}</p>
@@ -44,3 +45,4 @@
     </footer>
     </body>
     </html>
+    

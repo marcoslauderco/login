@@ -14,13 +14,6 @@ return [
     |
     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
-    ],
-
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -30,19 +23,16 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-    'auth0' => [
-        'client_id' => env('AUTH0_CLIENT_ID'),
-        'client_secret' => env('AUTH0_CLIENT_SECRET'),
-        'redirect' => env('AUTH0_REDIRECT_URI'),
-        'base_url' => env('AUTH0_BASE_URL'),
-    ],
-    'keycloak' => [
-        'client_id' => env('KEYCLOAK_CLIENT_ID'),
-        'client_secret' => env('KEYCLOAK_CLIENT_SECRET'),
-        'redirect' => env('KEYCLOAK_REDIRECT_URI'),
-        'base_url' => env('KEYCLOAK_BASE_URL'),   // Specify your keycloak server URL here
-        'realms' => env('KEYCLOAK_REALM')         // Specify your keycloak realm
-      ],
 
+    'resend' => [
+        'key' => env('RESEND_KEY'),
+    ],
+
+    'slack' => [
+        'notifications' => [
+            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
+        ],
+    ],
 
 ];
